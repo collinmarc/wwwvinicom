@@ -1,0 +1,114 @@
+@import url(https://fonts.googleapis.com/css?family=Cookie);
+html {
+	overflow: hidden;
+	touch-action: none;
+	content-zooming: none;
+}
+body {
+	position: absolute;
+	margin: 0px;
+	padding: 0px;
+	width: 100%;
+	height: 100%;
+
+}
+
+#screen {
+	position: absolute;
+	width: 405px;
+	height: 313px;
+	margin: 0px;
+	top: 0;
+	bottom: 0px;
+	left: 0;
+	right: 0;
+	transform: scale3d(1, 1, 1);
+	-webkit-user-select: none;
+	user-select: none;
+	border-radius: 0px;
+}
+
+#screen img {
+	position: absolute;
+}
+
+#screen input {
+	display: none;
+}
+
+#screen input + label {
+	position: absolute;
+	width: 22%;
+	height: 22%;
+	overflow: hidden;
+	transition: all 0.4s linear 0s;
+	cursor: pointer;
+	z-index: 1;
+	border-radius: 0px;
+}
+
+#i01 + label {left: 3%; top: 3%;}
+#i02 + label {left: 27%; top: 3%;}
+#i03 + label {left: 51%; top: 3%;}
+#i04 + label {left: 75%; top: 3%;}
+
+#i05 + label {left: 3%; top: 27%;}
+#i06 + label {left: 27%; top: 27%;}
+#i07 + label {left: 51%; top: 27%;}
+#i08 + label {left: 75%; top: 27%;}
+
+#i09 + label {left: 3%; top: 51%;}
+#i10 + label {left: 27%; top: 51%;}
+#i11 + label {left: 51%; top: 51%;}
+#i12 + label {left: 75%; top: 51%;}
+
+#i13 + label {left: 3%; top: 75%;}
+#i14 + label {left: 27%; top: 75%;}
+#i15 + label {left: 51%; top: 75%;}
+#i16 + label {left: 75%; top: 75%;}
+
+#screen input:checked + label {
+	width: 70%;
+	height: 70%;
+	z-index: 20000;
+	transition: all 0.8s linear 0s;
+}
+
+#i01:checked + label {}
+#i02:checked + label {left: 3%;}
+#i03:checked + label {left: 27%;}
+#i04:checked + label {left: 27%;}
+
+#i05:checked + label {top: 3%;}
+#i06:checked + label {left: 3%; top: 3%;}
+#i07:checked + label {left: 27%; top: 3%;}
+#i08:checked + label {left: 27%; top: 3%;}
+
+#i09:checked + label {top: 27%;}
+#i10:checked + label {left: 3%; top: 27%;}
+#i11:checked + label {left: 27%; top: 27%;}
+#i12:checked + label {left: 27%; top: 27%;}
+
+#i13:checked + label {top: 27%;}
+#i14:checked + label {left: 3%; top: 27%;}
+#i15:checked + label {left: 27%; top: 27%;}
+#i16:checked + label {left: 27%; top: 27%;}
+
+#caption {
+	position:absolute;
+	width:445px;
+	height:60px;
+	left: 50%;
+	top: 50%;
+	margin-left:-222px;
+	margin-top:140px;
+	color: #666;
+	font-family: 'Cookie', cursive, georgia, times, serif;
+	font-size: 1.8em;
+	text-align: center;
+	-webkit-user-select: none;
+	user-select: none;
+}
+#caption b {
+	font-size: 1.5em;
+}

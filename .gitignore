@@ -1,0 +1,19 @@
+config/settings.*.php
+admin5985/autoupgrade/
+cache/*
+config/xml/*.xml
+/log/*
+*sitemap.xml
+themes/*/cache/
+theme2/*/cache/
+modules/*/config*.xml
+admin5985/backups/
+admin5985/export/
+admin5985/import/
+download/
+/img/*
+upload/
+​
+/admin5985/themes/default - Copie
+/themes/default-bootstrap - Copie
+/__DEVTEMP

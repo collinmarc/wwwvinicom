@@ -1,0 +1,9 @@
+delete from pre8466_stock_available where id_product in (SELECT id_product from pre8466_product where active = 0);
+delete from pre8466_product_lang where id_product in (SELECT id_product from pre8466_product where active = 0);
+delete from pre8466_product_attribute where id_product in (SELECT id_product from pre8466_product where active = 0);
+delete from pre8466_product_attribute_shop where id_product in (SELECT id_product from pre8466_product where active = 0);
+delete from pre8466_product_lang where id_product in (SELECT id_product from pre8466_product where active = 0);
+delete from pre8466_image where id_product in (SELECT id_product from pre8466_product where active = 0);
+delete from pre8466_image_shop where id_product in (SELECT id_product from pre8466_product where active = 0);
+delete from pre8466_feature_product where id_product in (SELECT id_product from pre8466_product where active = 0);
+delete from pre8466_product where active = 0;

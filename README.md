@@ -215,4 +215,3 @@ Recopie du fichier d'origine
 ----
 Added : /www/vinicom/override/controllers/front/AuthController.php
 
-"# wwwvinicom" 

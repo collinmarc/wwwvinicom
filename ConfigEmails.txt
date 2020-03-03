@@ -1,0 +1,7 @@
+Utiliser mes propres paramétres SMTP
+Nom de domaine :
+Serveur : smtp.gmail.com
+utilisateur SMTP : marccollin.com@gmail.com
+Mot de passe SMTP : tphhgv3.
+Chiffrement : SSL
+Port :465

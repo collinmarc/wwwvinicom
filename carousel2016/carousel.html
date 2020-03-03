@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html class=" js csstransforms3d" lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  
+  <!-- disable zooming -->
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=0">
+  
+  <link rel="stylesheet" href="fichiers/style.css" media="screen">
+
+
+    <style media="screen">
+
+    .container {
+      width: 210px;
+      height: 280px;
+      position: relative;
+      margin: 0 auto 40px;
+      border: 1px solid #CCC;
+      -webkit-perspective: 1100px;
+         -moz-perspective: 1100px;
+           -o-perspective: 1100px;
+              perspective: 1100px;
+    }
+
+
+    #carousel {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      -webkit-transform-style: preserve-3d;
+         -moz-transform-style: preserve-3d;
+           -o-transform-style: preserve-3d;
+              transform-style: preserve-3d;
+    }
+
+    .ready #carousel {
+      -webkit-transition: -webkit-transform 1s;
+         -moz-transition: -moz-transform 1s;
+           -o-transition: -o-transform 1s;
+              transition: transform 1s;
+    }
+
+    #carousel.panels-backface-invisible figure {
+      -webkit-backface-visibility: hidden;
+         -moz-backface-visibility: hidden;
+           -o-backface-visibility: hidden;
+              backface-visibility: hidden;
+    }
+
+    #carousel figure {
+      display: block;
+      position: absolute;
+      width: 186px;
+      height: 259px;
+      left: 10px;
+      top: 10px;
+      border: 1px solid #cccccc;
+      font-size: 1px;
+      font-weight: bold;
+      color: white;
+      text-align: center;
+    }
+
+    .ready #carousel figure {
+      -webkit-transition: opacity 1s, -webkit-transform 1s;
+         -moz-transition: opacity 1s, -moz-transform 1s;
+           -o-transition: opacity 1s, -o-transform 1s;
+              transition: opacity 1s, transform 1s;
+    }
+
+  </style>
+
+</head>
+<body class="ready" >
+<div style="background-image:url(img/cms/Vendanges_2.jpg); height:680px !important; padding-top:400px;">
+  <section class="container">
+    <div class="  panels-backface-invisible" style="transform: translateZ(-323px) rotateY(-612deg);" id="carousel">
+      <figure style="opacity: 1; background-color: rgba(255, 0, 0, 0.8); transform: rotateY(0deg) translateZ(323px);"><a href="img/cms/pdf/alsace.pdf" target="blank"><img src="alsace_1.jpg"></a></figure>
+      <figure style="opacity: 1; transform: rotateY(36deg) translateZ(323px);"><a href="img/cms/pdf/CORSE.pdf" target="blank"><img src="corse.jpg"></a></figure>
+      <figure style="opacity: 1; background-color: rgba(203, 255, 0, 0.8); transform: rotateY(72deg) translateZ(323px);"><a href="img/cms/pdf/bordeaux.pdf" target="blank"><img src="bordelais.jpg"></a></figure>
+      <figure style="opacity: 1; background-color: rgba(51, 255, 0, 0.8); transform: rotateY(108deg) translateZ(323px);"><a href="img/cms/pdf/Bourgogne.pdf" target="blank"><img src="bourgogne_1.jpg"></a></figure>
+      <figure style="opacity: 1; background-color: rgba(0, 255, 101, 0.8); transform: rotateY(144deg) translateZ(323px);"><a href="img/cms/pdf/Beaujolais.pdf" target="blank"><img src="beaujolais_1.jpg"></a></figure>
+      <figure style="opacity: 1; background-color: rgba(0, 255, 254, 0.8); transform: rotateY(180deg) translateZ(323px);"><a href="img/cms/pdf/CHAMPAGNE.pdf" target="blank"><img src="champagne_1.jpg"></a></figure>
+      <figure style="opacity: 1; background-color: rgba(0, 101, 255, 0.8); transform: rotateY(216deg) translateZ(323px);"><a href="img/cms/pdf/LGDCRO.pdf" target="blank"><img src="languedoc-rous.jpg"></a></figure>
+      <figure style="opacity: 1; background-color: rgba(50, 0, 255, 0.8); transform: rotateY(252deg) translateZ(323px);"><a href="img/cms/pdf/LOIRE.pdf" target="blank"><img src="loire_1.jpg"></a></figure>
+      <figure style="opacity: 1; background-color: rgba(203, 0, 255, 0.8); transform: rotateY(288deg) translateZ(323px);"><a href="img/cms/pdf/RHONE.pdf" target="blank"><img src="rhone2.jpg"></a></figure>
+      <figure style="opacity: 1; transform: rotateY(324deg) translateZ(323px); background-color: rgba(255, 0, 153, 0.8);"><a href="img/cms/pdf/SO.pdf" target="blank"><img src="sud-ouest_1.jpg"></a></figure>
+
+    </div>
+  </section>
+</div>
+  <section id="options">
+    <p style="display:none;">
+      <label for="panel-count">panels</label>
+      <input id="panel-count" value="10" min="3" max="10" type="range">
+    <span class=" range-display">10</span></p>
+
+    <p id="navigation" style="text-align:center;">
+      <button id="previous" data-increment="-1"><< Région Précédente</button>
+      <button id="next" data-increment="1">Région suivante >></button>
+    </p>
+
+    <p style="display:none;">
+      <button id="toggle-axis">Toggle Carousel Axis</button>
+    </p>
+
+    <p style="display:none;">
+      <button id="toggle-backface-visibility">Toggle Backface Visibility</button>
+    </p>
+
+  </section>
+
+  <script src="fichiers/utils.js"></script>
+  <script>
+    var transformProp = Modernizr.prefixed('transform');
+
+    function Carousel3D ( el ) {
+      this.element = el;
+
+      this.rotation = 0;
+      this.panelCount = 0;
+      this.totalPanelCount = this.element.children.length;
+      this.theta = 0;
+
+      this.isHorizontal = true;
+
+    }
+
+    Carousel3D.prototype.modify = function() {
+
+      var panel, angle, i;
+
+      this.panelSize = this.element[ this.isHorizontal ? 'offsetWidth' : 'offsetHeight' ];
+      this.rotateFn = this.isHorizontal ? 'rotateY' : 'rotateX';
+      this.theta = 360 / this.panelCount;
+
+      // do some trig to figure out how big the carousel
+      // is in 3D space
+      this.radius = Math.round( ( this.panelSize / 2) / Math.tan( Math.PI / this.panelCount ) );
+
+      for ( i = 0; i < this.panelCount; i++ ) {
+        panel = this.element.children[i];
+        angle = this.theta * i;
+        panel.style.opacity = 1;
+        panel.style.backgroundColor = 'hsla(' + angle + ', 100%, 50%, 0.8)';
+        // rotate panel, then push it out in 3D space
+        panel.style[ transformProp ] = this.rotateFn + '(' + angle + 'deg) translateZ(' + this.radius + 'px)';
+      }
+
+      // hide other panels
+      for (  ; i < this.totalPanelCount; i++ ) {
+        panel = this.element.children[i];
+        panel.style.opacity = 0;
+        panel.style[ transformProp ] = 'none';
+      }
+
+      // adjust rotation so panels are always flat
+      this.rotation = Math.round( this.rotation / this.theta ) * this.theta;
+
+      this.transform();
+
+    };
+
+    Carousel3D.prototype.transform = function() {
+      // push the carousel back in 3D space,
+      // and rotate it
+      this.element.style[ transformProp ] = 'translateZ(-' + this.radius + 'px) ' + this.rotateFn + '(' + this.rotation + 'deg)';
+    };
+
+
+
+    var init = function() {
+
+
+      var carousel = new Carousel3D( document.getElementById('carousel') ),
+          panelCountInput = document.getElementById('panel-count'),
+          axisButton = document.getElementById('toggle-axis'),
+          navButtons = document.querySelectorAll('#navigation button'),
+
+          onNavButtonClick = function( event ){
+            var increment = parseInt( event.target.getAttribute('data-increment') );
+            carousel.rotation += carousel.theta * increment * -1;
+            carousel.transform();
+          };
+
+      // populate on startup
+      carousel.panelCount = parseInt( panelCountInput.value, 10);
+      carousel.modify();
+
+
+      axisButton.addEventListener( 'click', function(){
+        carousel.isHorizontal = !carousel.isHorizontal;
+        carousel.modify();
+      }, false);
+
+      panelCountInput.addEventListener( 'change', function( event ) {
+        carousel.panelCount = event.target.value;
+        carousel.modify();
+      }, false);
+
+      for (var i=0; i < 2; i++) {
+        navButtons[i].addEventListener( 'click', onNavButtonClick, false);
+      }
+
+      document.getElementById('toggle-backface-visibility').addEventListener( 'click', function(){
+        carousel.element.toggleClassName('panels-backface-invisible');
+      }, false);
+
+      setTimeout( function(){
+        document.body.addClassName('ready');
+      }, 0);
+
+    };
+
+    window.addEventListener( 'DOMContentLoaded', init, false);
+  </script>
+
+
+
+
+</body></html>

@@ -1,0 +1,17 @@
+
+/**
+* CSS File of module
+* 
+* @author Marc Collin
+* @copyright  Marc Collin
+* @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  Supprime l'affiche du menu haut CMS en mode catalogue et Commande pré-établie
+*/
+
+
+	#block_top_menu  {
+	display: none;
+	} 
+		#header_logo  {
+	display: none;
+	} 
