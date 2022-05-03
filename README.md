@@ -2,6 +2,7 @@
 site internet Vinicom.wine
 #V20200303150000
 0001179: Modification des cols du backoffice Client
+
 #V20180820
 #865: Annomalie en Saisie de Commande
 #866: Traitement des produits désactivés en précommande

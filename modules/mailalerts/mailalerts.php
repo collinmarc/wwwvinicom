@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2015 PrestaShop
+ * 2007-2016 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,12 +19,13 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2015 PrestaShop SA
+ * @copyright 2007-2016 PrestaShop SA
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  * International Registered Trademark & Property of PrestaShop SA
  */
- // ModifiÃ© par Vinicom le 04/02/2016
- // VNC : 04/02/2016 : dÃ©finition d'une table des items  
+ // Modifié par Vinicom le 04/02/2016
+ // VNC : 04/02/2016 : définition d'une table des items
+ // MISE A JOUR PAR MCII LE 03/05/22 Suite à une MAJ DU MODULE RGPD ? du 29/04/2022  
 
 if (!defined('_CAN_LOAD_FILES_'))
 	exit;
@@ -50,7 +51,7 @@ class MailAlerts extends Module
 	{
 		$this->name = 'mailalerts';
 		$this->tab = 'administration';
-		$this->version = '3.6.0';
+		$this->version = '3.7.0';
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
 
@@ -93,6 +94,9 @@ class MailAlerts extends Module
 			!$this->registerHook('actionProductCoverage') ||
 			!$this->registerHook('actionOrderReturn') ||
 			!$this->registerHook('actionOrderEdited') ||
+			!$this->registerHook('registerGDPRConsent') ||
+			!$this->registerHook('actionDeleteGDPRCustomer') ||
+			!$this->registerHook('actionExportGDPRData') ||
 			!$this->registerHook('displayHeader'))
 			return false;
 
@@ -277,7 +281,7 @@ class MailAlerts extends Module
 			$message = $this->l('No message');
 
 		$items_table = '';
-		// VNC : 04/02/2016 : DÃ©claration de la table des produits faÃ§on Vinicom
+		// VNC : 04/02/2016 : Déclaration de la table des produits façon Vinicom
 		$items_tableVnc = '';
 
 		$products = $params['order']->getProducts();
@@ -323,13 +327,15 @@ class MailAlerts extends Module
 						.Tools::displayPrice(($unit_price * $product['product_quantity']), $currency, false)
 					.'</td>
 				</tr>';
-			//VNC : 04/02/2016 :  initiaisation de la table des items faÃ§on vinicom
-			$items_tableVnc .=
+			//VNC : 04/02/2016 :  initiaisation de la table des items façon vinicom
+/*			$items_tableVnc .=
 				'[ligneprestashop]
 					[reference]'.$product['product_reference'].'[/reference]
 					[quantite]'.(int)$product['product_quantity'].'[/quantite]
 					[prixunitaire]'.$unit_price.'[/prixunitaire]
 				[/ligneprestashop]';
+*/
+			$items_tableVnc .="[ligneprestashop][reference]".$product['product_reference']."[/reference][quantite]".(int)$product['product_quantity']."[/quantite][prixunitaire]".$unit_price."[/prixunitaire][/ligneprestashop]".PHP_EOL;
 
 		}
 		foreach ($params['order']->getCartRules() as $discount)
@@ -882,6 +888,27 @@ class MailAlerts extends Module
 			$order->getCustomer()->email,
 			$order->getCustomer()->firstname.' '.$order->getCustomer()->lastname,
 			null, null, null, null, _PS_MAIL_DIR_, true, (int)$order->id_shop);
+	}
+
+	public function hookActionDeleteGDPRCustomer($customer)
+	{
+		if (!empty($customer['email']) && Validate::isEmail($customer['email'])) {
+			$sql = "DELETE FROM "._DB_PREFIX_."mailalert_customer_oos WHERE customer_email = '".pSQL($customer['email'])."'";
+			if (Db::getInstance()->execute($sql)) {
+				return json_encode(true);
+			}
+			return json_encode($this->l('Mail alert: Unable to delete customer using email.'));
+		}
+	}
+	public function hookActionExportGDPRData($customer)
+	{
+		if (!Tools::isEmpty($customer['email']) && Validate::isEmail($customer['email'])) {
+			$sql = "SELECT * FROM "._DB_PREFIX_."mailalert_customer_oos WHERE customer_email = '".pSQL($customer['email'])."'";
+			if ($res = Db::getInstance()->ExecuteS($sql)) {
+				return json_encode($res);
+			}
+			return json_encode($this->l('Mail alert: Unable to export customer using email.'));
+		}
 	}
 
 	public function renderForm()

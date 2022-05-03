@@ -1,5 +1,5 @@
 {*
-* 2007-2015 PrestaShop
+* 2007-2016 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 * @author    PrestaShop SA <contact@prestashop.com>
-* @copyright 2007-2015 PrestaShop SA
+* @copyright 2007-2016 PrestaShop SA
 * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 * International Registered Trademark & Property of PrestaShop SA
 *}
@@ -41,10 +41,12 @@ function oosHookJsCodeMailAlert() {
 			if ($.trim(msg) == '0') {
 				$('#mailalert_link').show();
 				$('#oos_customer_email').show();
+				$('#oosHook').find('#gdpr_consent').show();
 			}
 			else {
 				$('#mailalert_link').hide();
 				$('#oos_customer_email').hide();
+				$('#oosHook').find('#gdpr_consent').hide();
 			}
 		}
 	});
@@ -59,6 +61,7 @@ function  addNotification() {
 			if ($.trim(msg) == '1') {
 				$('#mailalert_link').hide();
 				$('#oos_customer_email').hide();
+				$('#oosHook').find('#gdpr_consent').hide();
 				$('#oos_customer_email_result').html("{/literal}{l s='Request notification registered' mod='mailalerts'}{literal}");
 				$('#oos_customer_email_result').css('color', 'green').show();
 			}
@@ -89,9 +92,15 @@ $(document).ready(function() {
 </script>
 
 <!-- MODULE MailAlerts -->
+<form>
 	{if isset($email) AND $email}
 		<input type="text" id="oos_customer_email" name="customer_email" size="20" value="{l s='your@email.com' mod='mailalerts'}" class="mailalerts_oos_email" onclick="clearText();" /><br />
 	{/if}
-	<a href="#" title="{l s='Notify me when available' mod='mailalerts'}" onclick="return addNotification();" id="mailalert_link" rel="nofollow">{l s='Notify me when available' mod='mailalerts'}</a>
+
+	{if isset($id_module)}
+			{hook h='displayGDPRConsent' id_module=$id_module}
+	{/if}
+	<button type="submit" class="btn btn-default" title="{l s='Notify me when available' mod='mailalerts'}" onclick="return addNotification();" id="mailalert_link" rel="nofollow">{l s='Notify me when available' mod='mailalerts'}</button>
 	<span id="oos_customer_email_result" style="display:none;"></span>
+</form>
 <!-- END : MODULE MailAlerts -->
